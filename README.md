@@ -8,12 +8,20 @@ random photo from tumblr
 # Usage
 
 ```
-http://rpt.jgs.me/:id -> redirect random
+http://rpt.jgs.me/:id -> redirect photo
 ```
 
 ## Example
 
 http://rpt.jgs.me/spacesushipic
+
+# Requirements
+
+* Tumblr Api key
+
+```
+% heroku config:add TUMBLR_API_KEY=$YOURKEY
+```
 
 # Author
 
