@@ -16,7 +16,7 @@ crawl = (id, callback)->
       else
         crawl "#{id}.tumblr.com", callback
 
-app.get '/', (req, res)-> res.send 'it works'
+app.get '/', (req, res)-> res.redirect '/spacesushipic'
 app.get '/:id', (req, res)->
   crawl req.params.id, (url)->
     if url is null
