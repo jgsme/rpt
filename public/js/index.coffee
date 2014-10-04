@@ -5,3 +5,5 @@ vm = new Vue
   methods:
     go: ->
       location.href = "/p/#{@.$data.id}"
+    checkEnter: (event)->
+      if event.keyCode is 13 then @go()

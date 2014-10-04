@@ -3,8 +3,10 @@ extends layout
 block body
   #main
     .inputs
-      label(for='url') URL
-      input(id='url', value='#{url}', type='text')
-      label(for='md') Markdown
-      input(id='md', value='![](#{url})', type='text')
+      p
+        label(for='url') URL
+        input(id='url', value='#{url}', type='text', size='57', onclick='this.select()')
+      p
+        label(for='md') Markdown
+        input(id='md', value='![](#{url})', type='text', size='50', onclick='this.select()')
     img(src='#{url}')

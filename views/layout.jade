@@ -8,10 +8,9 @@ html
     script(src='//cdnjs.cloudflare.com/ajax/libs/vue/0.10.6/vue.min.js', type='text/javascript')
   body
     header
-      p RPT
-      p Random Photo from Tumblr
-      #jump
-        input(type='text', v-model='id')
-        button(v-on='click: go') GO
+      a(href='/') RPT
+      span#jump
+        input(type='text', v-model='id', v-on='keypress: checkEnter', placeholder='Enter id or URL')
+        button.pure-button.pure-button-primary(v-on='click: go') GO
     block body
     script(src='/js/index.js', type='text/javascript')
