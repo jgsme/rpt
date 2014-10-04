@@ -11,4 +11,8 @@ html
     header
       p RPT
       p Random Photo from Tumblr
+      #jump
+        input(type='text', v-model='id')
+        button(v-on='click: go') GO
     block body
+    script(src='/js/index.js', type='text/javascript')

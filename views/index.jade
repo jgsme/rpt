@@ -1,10 +1,6 @@
 extends layout
 
 block body
-  #jump
-    input(type='text', v-model='id')
-    button(v-on='click: go') GO
-
   #main
     .inputs
       label(for='url') URL
@@ -12,4 +8,3 @@ block body
       label(for='md') Markdown
       input(id='md', value='![](#{url})', type='text')
     img(src='#{url}')
-  script(src='/js/index.js', type='text/javascript')
