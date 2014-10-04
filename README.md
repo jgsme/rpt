@@ -7,13 +7,21 @@ random photo from tumblr
 
 # Usage
 
-```
-http://rpt.jgs.me/:id -> redirect photo
-```
+## GET `/`
 
-## Example
+* alias `/p/spacesushipic`
 
-http://rpt.jgs.me/spacesushipic
+## GET `/p/:id`
+
+![](https://cloud.githubusercontent.com/assets/557961/4514559/841ec580-4b77-11e4-9c11-9c3bf44546c9.png)
+
+* show image url
+* markdown sentence for paste image
+* image preview
+
+## GET `/r/:id`
+
+* redirect image url
 
 # Requirements
 
