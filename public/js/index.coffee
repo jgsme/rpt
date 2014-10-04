@@ -1,5 +1,5 @@
 vm = new Vue
-  el: '#main'
+  el: '#jump'
   methods:
     go: ->
       location.href = "/p/#{@.$data.id}"

@@ -26,13 +26,25 @@ app.use stylus
   src: "#{__dirname}/public"
 app.use express.static("#{__dirname}/public")
 
-app.get '/', (req, res)-> res.render 'index'
-app.get '/p/:id', (req, res)-> res.render 'page'
+app.get '/', (req, res)->
+  crawl 'spacesushipic', (url)->
+    if url is null
+      res.status(404).send 'Not found'
+    else
+      res.render 'index',
+        url: url
+app.get '/p/:id', (req, res)->
+  crawl req.params.id, (url)->
+    if url is null
+      res.status(404).send 'Not found'
+    else
+      res.render 'index',
+        url: url
 app.get '/r/:id', (req, res)->
   crawl req.params.id, (url)->
     if url is null
       res.status(404).send 'Not found'
     else
-      res.send url
+      res.redirect url
 
 server = app.listen process.env.PORT || 3000, -> console.log "Server start at port: #{server.address().port}"

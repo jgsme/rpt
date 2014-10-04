@@ -1,10 +1,15 @@
 extends layout
 
-block scripts
-  script(src='//cdnjs.cloudflare.com/ajax/libs/vue/0.10.6/vue.min.js', type='text/javascript')
-
 block body
-  #main
+  #jump
     input(type='text', v-model='id')
     button(v-on='click: go') GO
-  script(src='/js/index.js')
+
+  #main
+    .inputs
+      label(for='url') URL
+      input(id='url', value='#{url}', type='text')
+      label(for='md') Markdown
+      input(id='md', value='![](#{url})', type='text')
+    img(src='#{url}')
+  script(src='/js/index.js', type='text/javascript')
