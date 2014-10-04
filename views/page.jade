@@ -1,0 +1,15 @@
+extends layout
+
+block scripts
+  script(src='//cdnjs.cloudflare.com/ajax/libs/vue/0.10.6/vue.min.js', type='text/javascript')
+  script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js', type='text/javascript')
+
+block body
+  #main
+    .inputs
+      label(for='url') URL
+      input(id='url', v-model='url')
+      label(for='md') Markdown
+      input(id='md', v-model='md')
+    img(v-attr='src: url')
+  script(src='/js/page.js', type='text/javascript')

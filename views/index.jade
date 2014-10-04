@@ -1,0 +1,10 @@
+extends layout
+
+block scripts
+  script(src='//cdnjs.cloudflare.com/ajax/libs/vue/0.10.6/vue.min.js', type='text/javascript')
+
+block body
+  #main
+    input(type='text', v-model='id')
+    button(v-on='click: go') GO
+  script(src='/js/index.js')

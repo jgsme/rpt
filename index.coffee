@@ -1,5 +1,7 @@
 express = require 'express'
 request = require 'request'
+coffee = require 'coffee-middleware'
+stylus = require('stylus').middleware
 app = express()
 
 url = (id)-> "http://api.tumblr.com/v2/blog/#{id}/posts/photo?api_key=#{process.env.TUMBLR_API_KEY}&limit=1"
@@ -16,12 +18,21 @@ crawl = (id, callback)->
       else
         crawl "#{id}.tumblr.com", callback
 
-app.get '/', (req, res)-> res.redirect '/spacesushipic'
-app.get '/:id', (req, res)->
+app.set 'views', "#{__dirname}/views"
+app.set 'view engine', 'jade'
+app.use coffee
+  src: "#{__dirname}/public"
+app.use stylus
+  src: "#{__dirname}/public"
+app.use express.static("#{__dirname}/public")
+
+app.get '/', (req, res)-> res.render 'index'
+app.get '/p/:id', (req, res)-> res.render 'page'
+app.get '/r/:id', (req, res)->
   crawl req.params.id, (url)->
     if url is null
       res.status(404).send 'Not found'
     else
-      res.redirect url
+      res.send url
 
 server = app.listen process.env.PORT || 3000, -> console.log "Server start at port: #{server.address().port}"
