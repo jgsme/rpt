@@ -9,7 +9,7 @@ crawl = (id, callback)->
   request url(id), (err, r, body)->
     body = JSON.parse body
     if body.meta.status is 200
-      total = body.response.total_posts
+      total = parseInt body.response.total_posts
       request "#{url(id)}&offset=#{Math.floor(Math.random() * total)}", (err, r, body)->
         callback JSON.parse(body).response.posts[0].photos[0].original_size.url
     else
