@@ -1,7 +1,6 @@
 rpt
 ===
 [![Dependency Status](https://david-dm.org/jgsme/rpt.png)](https://david-dm.org/jgsme/rpt)
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 random photo from tumblr
 
