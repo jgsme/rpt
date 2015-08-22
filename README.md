@@ -27,7 +27,7 @@ random photo from tumblr
 * Tumblr Api key
 
 ```
-% heroku config:add TUMBLR_API_KEY=$YOURKEY
+% export TUMBLR_API_KEY=$YOURKEY
 ```
 
 # Author
