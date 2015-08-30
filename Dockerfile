@@ -1,5 +1,5 @@
 FROM iojs:3.1.0
-MAINTAINER Takaya Kobayashi <kobayashi_takaya@cyberagent.co.jp>
+MAINTAINER jigsaw <m@jgs.me>
 
 ADD . /app
 RUN cd /app && npm install
