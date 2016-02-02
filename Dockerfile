@@ -1,7 +1,8 @@
-FROM iojs:3.1.0
+FROM node:5
 MAINTAINER jigsaw <m@jgs.me>
 
 ADD . /app
-RUN cd /app && npm install
+WORKDIR /app
+RUN npm install
 
-CMD ["/app/node_modules/.bin/lsc", "/app/index.ls"]
+CMD ["npm", "start"]
