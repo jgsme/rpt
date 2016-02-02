@@ -22,6 +22,10 @@ random photo from tumblr
 
 * redirect image url
 
+## GET `/b/:id`
+
+* Return base64 encoded image
+
 # Requirements
 
 * Tumblr Api key
