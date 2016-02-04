@@ -3,6 +3,7 @@ import 'babel-polyfill'
 import {readFileSync} from 'fs'
 import {resolve} from 'path'
 import Koa from 'koa'
+import cors from 'kcors'
 import Jade from 'koa-jade'
 import Router from 'koa-router'
 import crawl from './lib/crawl.ls'
@@ -68,6 +69,7 @@ app
       ctx.status = err.status || 500
     }
   })
+  .use(cors())
   .use(router.routes())
   .use(router.allowedMethods())
 
