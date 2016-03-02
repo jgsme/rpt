@@ -29,6 +29,14 @@ router
     const url = await crawl(ctx.params.id)
     ctx.render('index', {url})
   })
+  .get('/ps/:id', async (ctx) => {
+    const urls = await crawl(ctx.params.id, {
+      isAll: true,
+      size: ctx.query.size,
+      offset: ctx.query.offset
+    })
+    ctx.body = urls
+  })
   .get('/r/:id', async (ctx) => {
     const url = await crawl(ctx.params.id)
     ctx.redirect(url)
