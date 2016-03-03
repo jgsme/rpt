@@ -17,6 +17,15 @@ random photo from tumblr
 * show image url
 * markdown sentence for paste image
 * image preview
+ 
+## GET `/ps/:id`
+
+* Return sevral image urls
+
+### Query
+
+* `size`: {500, 1280, (Empty)}, default: (Empty), If empty then return original size url
+* `offset`: Number, default: (Empty), If empty then return random post's url
 
 ## GET `/r/:id`
 
