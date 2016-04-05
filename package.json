@@ -24,7 +24,7 @@
     "koa-router": "^7.0.1",
     "livescript": "^1.4.0",
     "node-base64-image": "^0.1.2",
-    "request": "^2.69.0",
+    "request": "^2.70.0",
     "stylus": "^0.54.2"
   },
   "babel": {
