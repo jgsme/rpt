@@ -16,7 +16,7 @@
     "babel-cli": "^6.16.0",
     "babel-polyfill": "^6.16.0",
     "babel-preset-es2015": "^6.14.0",
-    "babel-preset-stage-3": "^6.11.0",
+    "babel-preset-stage-3": "^6.16.0",
     "kcors": "^1.3.0",
     "koa": "^2.0.0-alpha.3",
     "koa-convert": "^1.2.0",
