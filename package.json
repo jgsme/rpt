@@ -21,7 +21,7 @@
     "koa": "^2.0.0-alpha.3",
     "koa-convert": "^1.2.0",
     "koa-jade": "^2.1.0",
-    "koa-router": "^7.0.1",
+    "koa-router": "^7.1.0",
     "livescript": "^1.5.0",
     "node-base64-image": "^1.0.3",
     "request": "^2.79.0",
