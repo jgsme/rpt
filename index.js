@@ -1,89 +1,95 @@
-import 'livescript'
-import 'babel-polyfill'
-import {readFileSync} from 'fs'
-import {resolve} from 'path'
-import Koa from 'koa'
-import convert from 'koa-convert'
-import cors from 'kcors'
-import Jade from 'koa-jade'
-import Router from 'koa-router'
-import crawl from './lib/crawl.ls'
-import {encode} from './lib/base64.ls'
+const {parse, URLSearchParams} = require('url')
+const request = require('request')
+const base64 = require('node-base64-image')
+const {promisify} = require('util')
+const encode = promisify(base64.encode)
+const {TUMBLR_API_KEY} = process.env
 
-const app = new Koa()
-const router = new Router()
-const jade = new Jade({
-  viewPath: resolve(__dirname, './views'),
-  debug: false,
-  pretty: false,
-  compileDebug: false,
-  app: app
-})
+const urlGen = ({id, isLimit = true}) => {
+  let base =
+    `http://api.tumblr.com/v2/blog/${id}/posts/photo?api_key=${TUMBLR_API_KEY}`
+  return isLimit ? `${base}&limit=1` : base
+}
 
-router
-  .get('/', async (ctx) => {
-    const url = await crawl('spacesushipic')
-    ctx.render('index', {url})
-  })
-  .get('/p/:id', async (ctx) => {
-    const url = await crawl(ctx.params.id)
-    ctx.render('index', {url})
-  })
-  .get('/ps/:id', async (ctx) => {
-    const urls = await crawl(ctx.params.id, {
-      isAll: true,
-      size: ctx.query.size,
-      offset: ctx.query.offset
+const postResolver = ({body, opts = {}}) => {
+  return JSON.parse(body).response.posts.map(post => {
+    const {photos} = post
+    const ran = Math.floor(Math.random() * photos.length)
+    switch (opts.size) {
+      case '1280': return photos[ran].alt_sizes[0].url
+      case '500': return photos[ran].alt_sizes[1].url
+      default: return photos[ran].original_size.url
+    }
+  }).pop()
+}
+
+const crawl = ({id, opts = {}}) => new Promise((resolve, reject) => {
+  if (opts.offset !== undefined) {
+    request(`${urlGen({id})}&offset=${opts.offset}`, (err, res, body) => {
+      if (err) {
+        return reject(err)
+      }
+      resolve()
     })
-    ctx.body = urls
-  })
-  .get('/r/:id', async (ctx) => {
-    const url = await crawl(ctx.params.id)
-    ctx.redirect(url)
-  })
-  .get('/b/:id', async (ctx) => {
-    const url = await crawl(ctx.params.id)
-    const image = await encode(url)
-    const ext = url.split('.').pop()
-    ctx.body = `data:image/${ext};base64,${image}`
-  })
-  .get('/assets/:filename', async (ctx) => {
-    switch (ctx.params.filename) {
-      case 'index.js': {
-        ctx.body = readFileSync(resolve(__dirname, './build/index.js')).toString()
-        ctx.set('Content-Type', 'text/javascript; charset=utf-8')
-        break
+  } else {
+    request(`${urlGen({id})}`, (err, res, body) => {
+      if (err) {
+        return reject(err)
       }
-      case 'index.css': {
-        ctx.body = readFileSync(resolve(__dirname, './build/index.css')).toString()
-        ctx.set('Content-Type', 'text/css; charset=utf-8')
-        break
+      body = JSON.parse(body)
+      if (body.meta.status === 200) {
+        const total = parseInt(body.response.total_posts)
+        const url = opts.isAll ? urlGen({id, isLimit: false}) : urlGen({id})
+        request(
+          `${url}&offset=${Math.floor(Math.random() * total)}`, (e, r, b) => {
+            if (e) {
+              return reject(e)
+            }
+            return resolve(postResolver({body: b, opts}))
+          }
+        )
+      } else {
+        return reject(new Error(`Tumblr API returns ${body.meta.status}`))
       }
-      default: {
-        ctx.body = ''
-        ctx.status = 404
-      }
-    }
-  })
-
-app
-  .use(async (ctx, next) => {
-    try {
-      await next()
-    } catch (err) {
-      console.error(err.stack)
-      ctx.body = {
-        message: err.message
-      }
-      ctx.status = err.status || 500
-    }
-  })
-  .use(convert(cors()))
-  .use(router.routes())
-  .use(router.allowedMethods())
-
-app.listen(process.env.PORT || 3000)
-
-process.on('uncaughtException', (err) => {
-  console.log(err)
+    })
+  }
 })
+
+module.exports = async (req, res) => {
+  try {
+    const url = parse(req.url)
+    res.statusCode = 200
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Methods', 'GET')
+    switch (url.pathname) {
+      case '/': {
+        res.setHeader('Content-Type', 'application/json')
+        res.end('{"status": "ok"}')
+        break
+      }
+      case '/p': {
+        const params = new URLSearchParams(url.query)
+        const u = await crawl({id: params.get('id')})
+        res.setHeader('Content-Type', 'text/plain')
+        res.end(u)
+        break
+      }
+      case '/b': {
+        const params = new URLSearchParams(url.query)
+        const u = await crawl({id: params.get('id')})
+        const image = await encode(u, {
+          string: true
+        })
+        const ext = u.split('.').pop()
+        res.setHeader('Content-Type', 'text/plain')
+        res.end(`data:image/${ext};base64,${image}`)
+        break
+      }
+    }
+  } catch (err) {
+    res.statusCode = 500
+    res.setHeader('Content-Type', 'application/json')
+    res.end('{"status": "Error"}')
+    console.log(500, err)
+  }
+}
