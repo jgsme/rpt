@@ -3,28 +3,29 @@
   "name": "rpt",
   "description": "random photo from tumblr",
   "scripts": {
-    "uglify": "uglifyjs public/index.js > public/index.min.js && mv public/index.min.js public/index.js",
-    "serve": "firebase serve",
+    "build": "browserifyinc src/index.js > public/index.js",
+    "serve": "static -p 9999 public",
     "start": "micro",
-    "watch": "chokidar src/*.js -c 'browserifyinc src/index.js > public/index.js'"
+    "uglify": "uglifyjs public/index.js > public/index.min.js && mv public/index.min.js public/index.js",
+    "watch": "chokidar src/*.js -c 'npm run build'"
   },
-  "author": "jigsaw (http://jgs.me)",
+  "author": "Takaya Kobayashi (https://kbys.tk/y)",
   "license": "MIT",
   "dependencies": {
-    "micro": "^7.3.3",
-    "node-base64-image": "^1.0.3",
-    "request": "^2.81.0"
+    "micro": "^9.0.1",
+    "node-base64-image": "^1.0.4",
+    "request": "^2.83.0"
   },
   "devDependencies": {
-    "browserify": "^14.4.0",
+    "browserify": "^14.5.0",
     "browserify-incremental": "^3.1.1",
     "chokidar-cli": "^1.2.0",
-    "firebase-tools": "^3.9.1",
-    "now": "^7.1.0",
-    "uglify-es": "^3.0.22",
+    "node-static": "^0.7.10",
+    "now": "^8.5.1",
+    "uglify-es": "^3.1.10",
     "yo-yo": "^1.4.1"
   },
   "engine": {
-    "node": "^8.1.2"
+    "node": "^9.2.0"
   }
 }
